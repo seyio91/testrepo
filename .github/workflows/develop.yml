@@ -36,4 +36,4 @@ jobs:
         git clone https://.:${{ secrets.GIT_TOKEN }}@github.com/seyio91/gitops-flow-test
         cd gitops-flow-test/stage
         kustomize edit set image seyio/react-test:${{ steps.slug.outputs.sha8 }}
-        git commit -am '${{ steps.slug.outputs.sha8 }}' && git push -u origin master || echo 'no changes'
+        git commit -am '${{ steps.slug.outputs.sha8 }}' && git push || echo 'no changes'
