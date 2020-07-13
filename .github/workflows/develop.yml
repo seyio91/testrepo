@@ -10,6 +10,8 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
+    env:
+      SHA8: ${GITHUB_SHA::8}
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image
@@ -22,7 +24,7 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
         repository: seyio/react-test
         dockerfile: Dockerfile
-        tags: latest, ${{ env.GITHUB_SHA }}
+        tags: latest, $SHA8
     - name: Check out my other private repo
       uses: actions/checkout@master
       with:
@@ -32,6 +34,6 @@ jobs:
         kustomize-version: "3.1.0"
     - name: Run Kustomization
       working-directory: ./gitops-flow-test/stage
-      run: kustomize edit set image seyio/react-test:${{ env.GITHUB_SHA }}
+      run: kustomize edit set image seyio/react-test:$SHA8
     - name: Push New Commit
-      run: git commit -am '${{ env.GITHUB_SHA }}' && git push || echo 'no changes'
+      run: git commit -am '$SHA8' && git push || echo 'no changes'
