@@ -15,10 +15,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Check out my other private repo
-      uses: actions/checkout@master
-      with:
-        repository: seyio91/gitops-flow-test
-        token: ${{ secrets.GIT_TOKEN }}
-    - name: Run Kustomization
-      working-directory: gitops-flow-test
-      run: ls -R
+      run : |
+        git clone https://.:${{ secrets.GITHUB_TOKEN }}@github.com/seyio91/gitops-flow-test
+        cd gitops-flow-test && ls -R
