@@ -14,30 +14,11 @@ jobs:
       SHA8: ${GITHUB_SHA::8}
     steps:
     - uses: actions/checkout@v2
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile.dev --tag seyio/react-test
-    - name: Build the Docker image
-      run: docker run --rm -e CI=true seyio/react-test npm test
-    - name: Get short SHA
-      id: slug
-      run: echo "::set-output name=sha8::$(echo ${GITHUB_SHA} | cut -c1-8)"
-    - uses: docker/build-push-action@v1
-      with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
-        repository: seyio/react-test
-        dockerfile: Dockerfile
-        tags: latest, ${{ steps.slug.outputs.sha8 }}
     - name: Check out my other private repo
       uses: actions/checkout@master
       with:
         repository: seyio91/gitops-flow-test
         token: ${{ secrets.GIT_TOKEN }}
-    - uses: imranismail/setup-kustomize@v1
-      with:
-        kustomize-version: "3.1.0"
     - name: Run Kustomization
-      working-directory: ./gitops-flow-test/stage
-      run: kustomize edit set image seyio/react-test:${{ steps.slug.outputs.sha8 }}
-    - name: Push New Commit
-      run: git commit -am '${{ steps.slug.outputs.sha8 }}' && git push || echo 'no changes'
+      working-directory: ./gitops-flow-test
+      run: ls -R
