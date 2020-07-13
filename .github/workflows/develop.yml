@@ -22,5 +22,16 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
         repository: seyio/react-test
         dockerfile: Dockerfile
-        tag_with_sha: true
-        tags: latest
+        tags: latest, ${{ env.GITHUB_SHA }}
+    - name: Check out my other private repo
+      uses: actions/checkout@master
+      with:
+        repository: seyio91/gitops-flow-test
+    - uses: imranismail/setup-kustomize@v1
+      with:
+        kustomize-version: "3.1.0"
+    - name: Run Kustomization
+      working-directory: ./gitops-flow-test/stage
+      run: kustomize edit set image seyio/react-test:${{ env.GITHUB_SHA }}
+    - name: Push New Commit
+      run: git commit -am '${{ env.GITHUB_SHA }}' && git push || echo 'no changes'
