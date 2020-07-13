@@ -20,5 +20,5 @@ jobs:
         repository: seyio91/gitops-flow-test
         token: ${{ secrets.GIT_TOKEN }}
     - name: Run Kustomization
-      working-directory: ./gitops-flow-test
+      working-directory: gitops-flow-test
       run: ls -R
